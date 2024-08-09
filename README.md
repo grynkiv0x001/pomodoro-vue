@@ -1,18 +1,8 @@
 # pomodoro-vue
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a simple Vue.js project using TS & SCSS.
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+The UI reference used to build it – [link to Figma](<https://www.figma.com/design/8tfYjeBj2KTV9uvGcMUCQf/%E2%8F%B0-Pomo---Pomodoro-Timer-App-Prototype-(v-0.1.0)-(Community)?node-id=1-10071&t=UYrOoGTGqPpOXYtv-11>)
 
 ## Project Setup
 
