@@ -1,3 +1,7 @@
-:root {
-  --clr-red-alpha-700: #ff4c4cb5;
+@import 'reset';
+@import 'variables';
+@import 'fonts';
+
+html {
+  font-family: 'Roboto Flex';
 }
