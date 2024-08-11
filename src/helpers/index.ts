@@ -1,3 +1,3 @@
-import { formatTime } from './formatTime'
+import { formatTime } from './format-time/formatTime'
 
 export { formatTime }

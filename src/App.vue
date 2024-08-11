@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 
 import type { ITimer } from '@/core/models'
 
@@ -16,7 +16,7 @@ const timer = reactive<ITimer>({
   autoResume: false
 })
 
-let countdownInterval: number | undefined
+let countdownInterval: NodeJS.Timeout
 
 if (timer.status === 'init') {
   timer.timeLeft = timer.minutes * 60
