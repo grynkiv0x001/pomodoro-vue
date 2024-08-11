@@ -55,49 +55,117 @@ const props = withDefaults(
   }
 }
 
-.color {
-  &--red {
-    background-color: var(--clr-red-alpha-700);
+.variant {
+  &--primary {
+    &.color {
+      &--red {
+        background-color: var(--clr-red-alpha-700);
 
-    &:hover {
-      background-color: var(--clr-red-alpha-800);
+        &:hover {
+          background-color: var(--clr-red-alpha-800);
+        }
+      }
+
+      &--green {
+        background-color: var(--clr-green-alpha-600);
+
+        &:hover {
+          background-color: var(--clr-green-alpha-700);
+        }
+      }
+
+      &--blue {
+        background-color: var(--clr-blue-alpha-600);
+
+        &:hover {
+          background-color: var(--clr-blue-alpha-700);
+        }
+      }
     }
   }
 
-  &--green {
-    background-color: var(--clr-green-alpha-600);
+  &--secondary {
+    &.color {
+      &--red {
+        background-color: var(--clr-red-alpha-100);
 
-    &:hover {
-      background-color: var(--clr-green-alpha-700);
-    }
-  }
+        &:hover {
+          background-color: var(--clr-red-alpha-200);
+        }
+      }
 
-  &--blue {
-    background-color: var(--clr-blue-alpha-600);
+      &--green {
+        background-color: var(--clr-green-alpha-100);
 
-    &:hover {
-      background-color: var(--clr-blue-alpha-700);
+        &:hover {
+          background-color: var(--clr-green-alpha-200);
+        }
+      }
+
+      &--blue {
+        background-color: var(--clr-blue-alpha-100);
+
+        &:hover {
+          background-color: var(--clr-blue-alpha-200);
+        }
+      }
     }
   }
 }
 
 .theme {
   &--light {
-    ::v-deep svg {
-      opacity: 0.8;
+    &.color {
+      &--red {
+        :deep(svg) {
+          path {
+            fill: var(--clr-red-900);
+          }
+        }
+      }
 
-      path {
-        fill: var(--clr-black);
+      &--green {
+        :deep(svg) {
+          path {
+            fill: var(--clr-green-900);
+          }
+        }
+      }
+
+      &--blue {
+        :deep(svg) {
+          path {
+            fill: var(--clr-blue-900);
+          }
+        }
       }
     }
   }
 
   &--dark {
-    ::v-deep svg {
-      opacity: 0.8;
+    &.color {
+      &--red {
+        :deep(svg) {
+          path {
+            fill: var(--clr-red-50);
+          }
+        }
+      }
 
-      path {
-        fill: var(--clr-white);
+      &--green {
+        :deep(svg) {
+          path {
+            fill: var(--clr-green-50);
+          }
+        }
+      }
+
+      &--blue {
+        :deep(svg) {
+          path {
+            fill: var(--clr-blue-50);
+          }
+        }
       }
     }
   }
