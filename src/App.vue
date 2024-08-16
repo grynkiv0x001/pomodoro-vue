@@ -61,5 +61,8 @@ const toggleTimerStatus = () => {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  background-color: var(--clr-red-50);
+  color: var(--clr-red-900);
 }
 </style>

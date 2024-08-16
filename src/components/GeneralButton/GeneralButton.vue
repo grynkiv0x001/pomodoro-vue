@@ -64,6 +64,12 @@ const props = withDefaults(
         &:hover {
           background-color: var(--clr-red-alpha-800);
         }
+
+        :deep(svg) {
+          path {
+            fill: var(--clr-red-950);
+          }
+        }
       }
 
       &--green {
@@ -72,6 +78,12 @@ const props = withDefaults(
         &:hover {
           background-color: var(--clr-green-alpha-700);
         }
+
+        :deep(svg) {
+          path {
+            fill: var(--clr-red-950);
+          }
+        }
       }
 
       &--blue {
@@ -79,6 +91,12 @@ const props = withDefaults(
 
         &:hover {
           background-color: var(--clr-blue-alpha-700);
+        }
+
+        :deep(svg) {
+          path {
+            fill: var(--clr-red-950);
+          }
         }
       }
     }
@@ -92,6 +110,12 @@ const props = withDefaults(
         &:hover {
           background-color: var(--clr-red-alpha-200);
         }
+
+        :deep(svg) {
+          path {
+            fill: var(--clr-red-900);
+          }
+        }
       }
 
       &--green {
@@ -99,6 +123,12 @@ const props = withDefaults(
 
         &:hover {
           background-color: var(--clr-green-alpha-200);
+        }
+
+        :deep(svg) {
+          path {
+            fill: var(--clr-green-900);
+          }
         }
       }
 
@@ -108,62 +138,10 @@ const props = withDefaults(
         &:hover {
           background-color: var(--clr-blue-alpha-200);
         }
-      }
-    }
-  }
-}
 
-.theme {
-  &--light {
-    &.color {
-      &--red {
-        :deep(svg) {
-          path {
-            fill: var(--clr-red-900);
-          }
-        }
-      }
-
-      &--green {
-        :deep(svg) {
-          path {
-            fill: var(--clr-green-900);
-          }
-        }
-      }
-
-      &--blue {
         :deep(svg) {
           path {
             fill: var(--clr-blue-900);
-          }
-        }
-      }
-    }
-  }
-
-  &--dark {
-    &.color {
-      &--red {
-        :deep(svg) {
-          path {
-            fill: var(--clr-red-50);
-          }
-        }
-      }
-
-      &--green {
-        :deep(svg) {
-          path {
-            fill: var(--clr-green-50);
-          }
-        }
-      }
-
-      &--blue {
-        :deep(svg) {
-          path {
-            fill: var(--clr-blue-50);
           }
         }
       }
