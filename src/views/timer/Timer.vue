@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onBeforeUnmount, onMounted } from 'vue'
 
 import Dots from '@/assets/icons/dots-three-outline-fill.svg'
 import Play from '@/assets/icons/play-fill.svg'
@@ -18,6 +18,30 @@ const statusIcon = computed(() => {
 
 const minutes = computed(() => Math.floor(timer.timeLeft / 60))
 const seconds = computed(() => timer.timeLeft % 60)
+
+const handleKeyDown = (e: KeyboardEvent) => {
+  const target = e.target as HTMLElement
+
+  const isInteractive =
+    ['INPUT', 'TEXTAREA', 'BUTTON'].includes(target.tagName) ||
+    target.getAttribute('contenteditable') === 'true'
+
+  if (e.code === 'Space' && !isInteractive) {
+    toggleTimerStatus()
+  }
+
+  if (e.ctrlKey && e.key === 'l') {
+    resetTimer()
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('keydown', handleKeyDown)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', handleKeyDown)
+})
 </script>
 
 <template>
@@ -34,7 +58,7 @@ const seconds = computed(() => timer.timeLeft % 60)
     </div>
 
     <div class="timer__controls">
-      <GeneralButton variant="secondary" @click="resetTimer">
+      <GeneralButton variant="secondary">
         <Dots />
       </GeneralButton>
       <GeneralButton size="lg" @click="toggleTimerStatus">
