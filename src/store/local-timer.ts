@@ -1,4 +1,4 @@
-import { reactive, watch, onMounted } from 'vue'
+import { reactive, watch } from 'vue'
 import type { ITimer } from '@/core/models'
 import { loadTimer, removeTimer, saveTimer } from '@/helpers/storage'
 
@@ -77,6 +77,10 @@ const resetTimer = () => {
   removeTimer()
 }
 
+const nextRound = () => {
+  timer.currentLoop++
+}
+
 if (timer.status === 'live' && timer.timeLeft > 0) {
   startTimer()
 }
@@ -93,6 +97,7 @@ export function useLocalTimer() {
   return {
     timer,
     toggleTimerStatus,
-    resetTimer
+    resetTimer,
+    nextRound
   }
 }

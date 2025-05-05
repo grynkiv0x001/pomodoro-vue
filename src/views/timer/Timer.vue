@@ -7,10 +7,12 @@ import Pause from '@/assets/icons/pause-fill.svg'
 import FastForward from '@/assets/icons/fast-forward-fill.svg'
 
 import { formatTime } from '@/helpers'
-import { GeneralButton } from '@/components/shared'
 import { useLocalTimer } from '@/store/local-timer'
+import { ui } from '@/store/ui'
 
-const { timer, toggleTimerStatus, resetTimer } = useLocalTimer()
+import { GeneralButton } from '@/components/shared'
+
+const { timer, toggleTimerStatus, resetTimer, nextRound } = useLocalTimer()
 
 const statusIcon = computed(() => {
   return timer.status === 'live' ? Pause : Play
@@ -58,13 +60,13 @@ onBeforeUnmount(() => {
     </div>
 
     <div class="timer__controls">
-      <GeneralButton variant="secondary">
+      <GeneralButton variant="secondary" @click="(e) => ui.openModal(e.currentTarget, 'settings')">
         <Dots />
       </GeneralButton>
       <GeneralButton size="lg" @click="toggleTimerStatus">
         <component :is="statusIcon" />
       </GeneralButton>
-      <GeneralButton variant="secondary">
+      <GeneralButton variant="secondary" @click="nextRound">
         <FastForward />
       </GeneralButton>
     </div>

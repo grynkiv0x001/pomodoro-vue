@@ -1,3 +1,4 @@
+import AppModal from '@/components/modal/AppModal.vue'
 import GeneralButton from '@/components/GeneralButton/GeneralButton.vue'
 
-export { GeneralButton }
+export { AppModal, GeneralButton }
