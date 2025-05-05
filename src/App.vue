@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import Timer from '@/views/timer/Timer.vue'
-import { useLocalTimer } from '@/store/local-timer'
-
-const { timer, toggleTimerStatus } = useLocalTimer()
 </script>
 
 <template>
   <div class="app">
-    <Timer :timer="timer" :toggleTimerStatus="toggleTimerStatus" />
+    <Timer />
   </div>
 </template>
 

@@ -8,3 +8,7 @@ export const loadTimer = (): ITimer | null => {
 export const saveTimer = (timer: ITimer) => {
   localStorage.setItem('pomodoro-timer', JSON.stringify(timer))
 }
+
+export const removeTimer = () => {
+  localStorage.removeItem('pomodoro-timer')
+}

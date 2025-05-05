@@ -6,16 +6,11 @@ import Play from '@/assets/icons/play-fill.svg'
 import Pause from '@/assets/icons/pause-fill.svg'
 import FastForward from '@/assets/icons/fast-forward-fill.svg'
 
-import type { ITimer } from '@/core/models'
 import { formatTime } from '@/helpers'
 import { GeneralButton } from '@/components/shared'
+import { useLocalTimer } from '@/store/local-timer'
 
-const props = defineProps<{
-  timer: ITimer
-  toggleTimerStatus: () => void
-}>()
-
-const { timer } = props
+const { timer, toggleTimerStatus, resetTimer } = useLocalTimer()
 
 const statusIcon = computed(() => {
   return timer.status === 'live' ? Pause : Play
@@ -39,11 +34,15 @@ const seconds = computed(() => timer.timeLeft % 60)
     </div>
 
     <div class="timer__controls">
-      <GeneralButton variant="secondary"><Dots /></GeneralButton>
+      <GeneralButton variant="secondary" @click="resetTimer">
+        <Dots />
+      </GeneralButton>
       <GeneralButton size="lg" @click="toggleTimerStatus">
         <component :is="statusIcon" />
       </GeneralButton>
-      <GeneralButton variant="secondary"><FastForward /></GeneralButton>
+      <GeneralButton variant="secondary">
+        <FastForward />
+      </GeneralButton>
     </div>
   </div>
 </template>
