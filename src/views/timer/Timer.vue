@@ -18,11 +18,7 @@ const props = defineProps<{
 const { timer } = props
 
 const statusIcon = computed(() => {
-  if (timer.status === 'init') {
-    return Play
-  }
-
-  return timer.status === 'paused' ? Play : Pause
+  return timer.status === 'live' ? Pause : Play
 })
 
 const minutes = computed(() => Math.floor(timer.timeLeft / 60))
