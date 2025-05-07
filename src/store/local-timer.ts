@@ -5,12 +5,12 @@ import { loadTimer, removeTimer, saveTimer } from '@/helpers/storage'
 const defaultTimer: ITimer = {
   status: 'init',
   timeLeft: 0,
-  minutes: 0.2,
+  minutes: 0.1,
   breakMinutes: 0.1,
-  longBreakMinutes: 0.3,
+  longBreakMinutes: 0.1,
   currentLoop: 1,
   loops: 4,
-  autoResume: false
+  autoResume: true
 }
 
 const saved = loadTimer()
@@ -45,7 +45,18 @@ const startTimer = () => {
       timer.updatedAt = Math.floor(Date.now() / 1000)
     } else {
       clearInterval(countdownInterval)
-      nextRound()
+
+      const isLast = timer.currentLoop === timer.loops && timer.timeLeft === 0
+
+      if (isLast) {
+        timer.currentLoop = 1
+        timer.startedAt = undefined
+        timer.updatedAt = undefined
+        timer.timeLeft = timer.minutes * 60
+        toggleTimerStatus()
+      } else {
+        nextRound()
+      }
     }
   }, 1000)
 }
@@ -84,10 +95,6 @@ const nextRound = () => {
 
   if (isLast) {
     timer.timeLeft = timer.longBreakMinutes * 60
-
-    if (timer.timeLeft === 0) {
-      timer.currentLoop = 1
-    }
   } else if (isEven) {
     timer.timeLeft = timer.breakMinutes * 60
   } else {

@@ -36,6 +36,13 @@ const long = computed({
     timer.longBreakMinutes = val
   }
 })
+
+const autoResume = computed({
+  get: () => timer.autoResume,
+  set: (val: boolean) => {
+    timer.autoResume = val
+  }
+})
 </script>
 
 <template>
@@ -60,6 +67,10 @@ const long = computed({
         <li class="item">
           <label for="long">Long pause:</label>
           <input id="long" type="number" name="long" v-model="long" min="1" />
+        </li>
+        <li class="item">
+          <label for="auto">Auto resume:</label>
+          <input id="auto" type="checkbox" name="autoResume" v-model="autoResume" />
         </li>
       </ul>
     </template>
@@ -99,6 +110,30 @@ const long = computed({
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
       opacity: 1;
+    }
+  }
+
+  input[type='checkbox'] {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    border-radius: 4px;
+    appearance: none;
+    -webkit-appearance: none;
+
+    &:checked {
+      &::after {
+        content: '';
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        display: block;
+        width: 8px;
+        height: 8px;
+        background-color: var(--clr-black-alpha-100);
+        border-radius: 50%;
+      }
     }
   }
 }
