@@ -26,14 +26,14 @@ const rounds = computed({
 const short = computed({
   get: () => timer.breakMinutes,
   set: (val: number) => {
-    timer.breakMinutes = val * 60
+    timer.breakMinutes = val
   }
 })
 
 const long = computed({
   get: () => timer.longBreakMinutes,
   set: (val: number) => {
-    timer.longBreakMinutes = val * 60
+    timer.longBreakMinutes = val
   }
 })
 </script>
@@ -83,5 +83,23 @@ const long = computed({
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  input {
+    background: transparent;
+    border: 1px solid var(--clr-black-alpha-100);
+  }
+
+  input[type='number'] {
+    max-width: 96px;
+    border-radius: 8px;
+    color: var(--clr-black);
+    font-size: 16px;
+    text-align: center;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      opacity: 1;
+    }
+  }
 }
 </style>

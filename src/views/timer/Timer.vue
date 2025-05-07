@@ -12,6 +12,12 @@ import { ui } from '@/store/ui'
 
 import { GeneralButton } from '@/components/shared'
 
+const STATE = {
+  work: 'Focus',
+  short: 'Short Break',
+  long: 'Long Break'
+}
+
 const { timer, toggleTimerStatus, resetTimer, nextRound } = useLocalTimer()
 
 const statusIcon = computed(() => {
@@ -37,6 +43,10 @@ const handleKeyDown = (e: KeyboardEvent) => {
   }
 }
 
+const timerState = computed(() => {
+  return timer.currentLoop === timer.loops ? 'long' : timer.currentLoop % 2 === 0 ? 'short' : 'work'
+})
+
 onMounted(() => {
   document.addEventListener('keydown', handleKeyDown)
 })
@@ -48,7 +58,9 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="timer">
-    <div class="timer__name"></div>
+    <div class="timer__name">
+      {{ STATE[timerState] }}
+    </div>
 
     <div class="timer__time">
       <div class="timer__time__minutes">

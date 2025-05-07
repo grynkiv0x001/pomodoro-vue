@@ -5,9 +5,9 @@ import { loadTimer, removeTimer, saveTimer } from '@/helpers/storage'
 const defaultTimer: ITimer = {
   status: 'init',
   timeLeft: 0,
-  minutes: 1,
-  breakMinutes: 5,
-  longBreakMinutes: 30,
+  minutes: 0.2,
+  breakMinutes: 0.1,
+  longBreakMinutes: 0.3,
   currentLoop: 1,
   loops: 4,
   autoResume: false
@@ -45,9 +45,7 @@ const startTimer = () => {
       timer.updatedAt = Math.floor(Date.now() / 1000)
     } else {
       clearInterval(countdownInterval)
-      timer.status = 'paused'
-      timer.startedAt = undefined
-      timer.updatedAt = undefined
+      nextRound()
     }
   }, 1000)
 }
@@ -70,7 +68,6 @@ const resetTimer = () => {
   Object.assign(timer, {
     ...defaultTimer,
     timeLeft: defaultTimer.minutes * 60,
-    minutes: 1,
     status: 'init'
   })
 
@@ -78,7 +75,33 @@ const resetTimer = () => {
 }
 
 const nextRound = () => {
-  timer.currentLoop++
+  if (timer.currentLoop < timer.loops) {
+    timer.currentLoop++
+  }
+
+  const isLast = timer.currentLoop === timer.loops
+  const isEven = timer.currentLoop % 2 === 0
+
+  if (isLast) {
+    timer.timeLeft = timer.longBreakMinutes * 60
+
+    if (timer.timeLeft === 0) {
+      timer.currentLoop = 1
+    }
+  } else if (isEven) {
+    timer.timeLeft = timer.breakMinutes * 60
+  } else {
+    timer.timeLeft = timer.minutes * 60
+  }
+
+  timer.status = timer.autoResume ? 'live' : 'paused'
+
+  if (timer.status === 'live') {
+    startTimer()
+  }
+
+  timer.startedAt = undefined
+  timer.updatedAt = undefined
 }
 
 if (timer.status === 'live' && timer.timeLeft > 0) {
