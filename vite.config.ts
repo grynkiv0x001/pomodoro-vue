@@ -7,6 +7,7 @@ import svgLoader from 'vite-svg-loader'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/pomodoro-vue/',
   plugins: [vue(), vueJsx(), svgLoader()],
   resolve: {
     alias: {
