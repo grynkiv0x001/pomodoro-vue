@@ -62,13 +62,16 @@
   --clr-blue-alpha-100: #4cacff26;
   --clr-blue-alpha-50: #4cacff0d;
 
-  @media (prefers-color-scheme: light) {
-    @include colors-light();
-  }
+  @include colors-light();
 
-  @media (prefers-color-scheme: dark) {
-    @include colors-dark();
-  }
+  // TODO: Fix themes
+  //@media (prefers-color-scheme: light) {
+  //  @include colors-light();
+  //}
+  //
+  //@media (prefers-color-scheme: dark) {
+  //  @include colors-dark();
+  //}
 }
 
 :root[data-theme='light'] {

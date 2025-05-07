@@ -1,55 +1,14 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
-
-import type { ITimer } from '@/core/models'
+import { ui } from '@/store/ui'
 
 import Timer from '@/views/timer/Timer.vue'
-
-const timer = reactive<ITimer>({
-  status: 'init',
-  timeLeft: 0,
-  minutes: 1,
-  breakMinutes: 5,
-  longBreakMinutes: 30,
-  currentLoop: 1,
-  loops: 4,
-  autoResume: false
-})
-
-let countdownInterval: NodeJS.Timeout
-
-if (timer.status === 'init') {
-  timer.timeLeft = timer.minutes * 60
-}
-
-const startTimer = () => {
-  countdownInterval = setInterval(() => {
-    if (timer.timeLeft > 0) {
-      timer.timeLeft--
-    } else {
-      clearInterval(countdownInterval)
-      timer.status = 'paused'
-    }
-  }, 1000)
-}
-
-const toggleTimerStatus = () => {
-  if (timer.status === 'live') {
-    clearInterval(countdownInterval)
-    timer.status = 'paused'
-  } else {
-    if (timer.timeLeft === 0) {
-      timer.timeLeft = timer.minutes * 60
-    }
-    timer.status = 'live'
-    startTimer()
-  }
-}
+import Settings from '@/views/settings/Settings.vue'
 </script>
 
 <template>
   <div class="app">
-    <Timer :timer="timer" :toggleTimerStatus="toggleTimerStatus" />
+    <Timer />
+    <Settings v-if="ui.isModalOpen && ui.modal === 'settings'" />
   </div>
 </template>
 
@@ -57,6 +16,7 @@ const toggleTimerStatus = () => {
 .app {
   height: 100vh;
   width: 100%;
+  position: relative;
 
   display: flex;
   align-items: center;

@@ -8,4 +8,6 @@ export interface ITimer {
   breakMinutes: number
   longBreakMinutes: number
   autoResume: boolean
+  startedAt?: number
+  updatedAt?: number
 }
