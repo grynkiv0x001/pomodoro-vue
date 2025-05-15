@@ -5,12 +5,12 @@ import { loadTimer, removeTimer, saveTimer } from '@/helpers/storage'
 const defaultTimer: ITimer = {
   status: 'init',
   timeLeft: 0,
-  minutes: 0.1,
-  breakMinutes: 0.1,
-  longBreakMinutes: 0.1,
+  minutes: 0.1, // Recommended – 30
+  breakMinutes: 0.1, // Recommended – 5
+  longBreakMinutes: 0.1, // Recommended – 25
   currentLoop: 1,
   loops: 4,
-  autoResume: true
+  autoResume: false
 }
 
 const saved = loadTimer()
@@ -37,6 +37,8 @@ const timer = reactive<ITimer>(
 let countdownInterval: NodeJS.Timeout
 
 const startTimer = () => {
+  clearInterval(countdownInterval)
+
   timer.startedAt = Math.floor(Date.now() / 1000)
 
   countdownInterval = setInterval(() => {
@@ -86,16 +88,29 @@ const resetTimer = () => {
 }
 
 const nextRound = () => {
-  if (timer.currentLoop < timer.loops) {
-    timer.currentLoop++
+  clearInterval(countdownInterval)
+
+  const isLastRound = timer.currentLoop === timer.loops
+
+  if (isLastRound) {
+    Object.assign(timer, {
+      ...defaultTimer,
+      timeLeft: defaultTimer.minutes * 60,
+      status: timer.autoResume ? 'live' : 'paused'
+    })
+
+    if (timer.status === 'live') {
+      startTimer()
+    }
+
+    return
   }
 
-  const isLast = timer.currentLoop === timer.loops
+  timer.currentLoop++
+
   const isEven = timer.currentLoop % 2 === 0
 
-  if (isLast) {
-    timer.timeLeft = timer.longBreakMinutes * 60
-  } else if (isEven) {
+  if (isEven) {
     timer.timeLeft = timer.breakMinutes * 60
   } else {
     timer.timeLeft = timer.minutes * 60
