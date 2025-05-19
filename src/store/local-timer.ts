@@ -1,6 +1,7 @@
 import { reactive, watch } from 'vue'
 import type { ITimer } from '@/core/models'
 import { loadTimer, removeTimer, saveTimer } from '@/helpers/storage'
+import { notify } from '@/helpers/notify'
 
 const defaultTimer: ITimer = {
   status: 'init',
@@ -49,6 +50,14 @@ const startTimer = () => {
       clearInterval(countdownInterval)
 
       const isLast = timer.currentLoop === timer.loops && timer.timeLeft === 0
+
+      notify(
+        timer.currentLoop === timer.loops - 1
+          ? 'Focus session complete! Time for a long break 🎉'
+          : timer.currentLoop % 2 === 0
+            ? 'Break is over! Time to focus 🧠'
+            : 'Focus session complete! Take a short break ☕'
+      )
 
       if (isLast) {
         timer.currentLoop = 1
