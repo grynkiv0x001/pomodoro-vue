@@ -2,10 +2,12 @@
 import { computed } from 'vue'
 
 import { useLocalTimer } from '@/store/local-timer'
+import { useSettings } from '@/store/settings'
 
 import AppModal from '@/components/modal/AppModal.vue'
 
 const { timer } = useLocalTimer()
+const { settings } = useSettings()
 
 const focusMinutes = computed({
   get: () => timer.minutes,
@@ -43,6 +45,13 @@ const autoResume = computed({
     timer.autoResume = val
   }
 })
+
+const notifications = computed({
+  get: () => settings.notifications,
+  set: (val: boolean) => {
+    settings.notifications = val
+  }
+})
 </script>
 
 <template>
@@ -71,6 +80,10 @@ const autoResume = computed({
         <li class="item">
           <label for="auto">Auto resume:</label>
           <input id="auto" type="checkbox" name="autoResume" v-model="autoResume" />
+        </li>
+        <li class="item">
+          <label for="notifications">Show notifications:</label>
+          <input id="notifications" type="checkbox" name="notifications" v-model="notifications" />
         </li>
       </ul>
     </template>
