@@ -17,6 +17,7 @@ export interface ITimer {
   autoResume: boolean
   startedAt?: number
   updatedAt?: number
+  duration?: number
 }
 
 export type ModalVariant = 'settings' | 'menu'

@@ -12,6 +12,8 @@ const { settings } = useSettings()
 const focusMinutes = computed({
   get: () => timer.minutes,
   set: (val: number) => {
+    timer.minutes = val
+
     if (timer.status !== 'live') {
       timer.timeLeft = val * 60
     }

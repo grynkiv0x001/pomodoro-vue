@@ -6,9 +6,9 @@ import { notify } from '@/helpers/notify'
 const defaultTimer: ITimer = {
   status: 'init',
   timeLeft: 0,
-  minutes: 0.1, // Recommended – 30
-  breakMinutes: 0.1, // Recommended – 5
-  longBreakMinutes: 0.1, // Recommended – 25
+  minutes: 30, // Recommended – 30
+  breakMinutes: 5, // Recommended – 5
+  longBreakMinutes: 25, // Recommended – 25
   currentLoop: 1,
   loops: 4,
   autoResume: false
@@ -16,11 +16,13 @@ const defaultTimer: ITimer = {
 
 const saved = loadTimer()
 
-if (saved?.status === 'live' && saved.updatedAt) {
-  const now = Math.floor(Date.now() / 1000)
-  const elapsed = now - saved.updatedAt
+const now = Date.now()
 
-  saved.timeLeft = Math.max(saved.timeLeft - elapsed, 0)
+if (saved?.status === 'live' && saved.startedAt && saved.duration) {
+  const elapsed = Math.floor((now - saved.startedAt) / 1000)
+  const timeLeft = saved.duration - elapsed
+
+  saved.timeLeft = Math.max(timeLeft, 0)
 
   if (saved.timeLeft === 0) {
     saved.status = 'paused'
@@ -30,44 +32,61 @@ if (saved?.status === 'live' && saved.updatedAt) {
 
 const timer = reactive<ITimer>(
   saved ?? {
-    ...defaultTimer,
-    timeLeft: defaultTimer.minutes * 60
+    ...defaultTimer
   }
 )
 
 let countdownInterval: NodeJS.Timeout
 
+const computeTimeLeft = () => {
+  if (!timer.startedAt || !timer.duration) {
+    return 0
+  }
+
+  const elapsed = Math.floor((Date.now() - timer.startedAt) / 1000)
+
+  return Math.max(timer.duration - elapsed, 0)
+}
+
 const startTimer = () => {
   clearInterval(countdownInterval)
 
-  timer.startedAt = Math.floor(Date.now() / 1000)
+  if (timer.timeLeft === 0) {
+    timer.timeLeft = timer.minutes * 60
+  }
+
+  timer.duration = timer.timeLeft
+  timer.startedAt = Date.now()
+  timer.status = 'live'
 
   countdownInterval = setInterval(() => {
-    if (timer.timeLeft > 0) {
-      timer.timeLeft--
-      timer.updatedAt = Math.floor(Date.now() / 1000)
-    } else {
+    const timeLeft = computeTimeLeft()
+
+    timer.timeLeft = timeLeft
+
+    if (timeLeft <= 0) {
       clearInterval(countdownInterval)
 
-      const isLast = timer.currentLoop === timer.loops && timer.timeLeft === 0
+      setTimeout(() => {
+        const isLast = timer.currentLoop === timer.loops
 
-      notify(
-        timer.currentLoop === timer.loops - 1
-          ? 'Focus session complete! Time for a long break 🎉'
-          : timer.currentLoop % 2 === 0
-            ? 'Break is over! Time to focus 🧠'
-            : 'Focus session complete! Take a short break ☕'
-      )
+        notify(
+          timer.currentLoop === timer.loops - 1
+            ? 'Focus session complete! Time for a long break 🎉'
+            : timer.currentLoop % 2 === 0
+              ? 'Break is over! Time to focus 🧠'
+              : 'Focus session complete! Take a short break ☕'
+        )
 
-      if (isLast) {
-        timer.currentLoop = 1
-        timer.startedAt = undefined
-        timer.updatedAt = undefined
-        timer.timeLeft = timer.minutes * 60
-        toggleTimerStatus()
-      } else {
-        nextRound()
-      }
+        if (isLast) {
+          timer.currentLoop = 1
+          timer.status = 'paused'
+          timer.startedAt = undefined
+          timer.timeLeft = timer.minutes * 60
+        } else {
+          nextRound()
+        }
+      }, 1000)
     }
   }, 1000)
 }
@@ -75,22 +94,20 @@ const startTimer = () => {
 const toggleTimerStatus = () => {
   if (timer.status === 'live') {
     clearInterval(countdownInterval)
+    timer.timeLeft = computeTimeLeft()
     timer.status = 'paused'
     timer.startedAt = undefined
   } else {
-    if (timer.timeLeft === 0) {
-      timer.timeLeft = timer.minutes * 60
-    }
-    timer.status = 'live'
     startTimer()
   }
 }
 
 const resetTimer = () => {
+  clearInterval(countdownInterval)
+
   Object.assign(timer, {
     ...defaultTimer,
-    timeLeft: defaultTimer.minutes * 60,
-    status: 'init'
+    timeLeft: defaultTimer.minutes * 60
   })
 
   removeTimer()
@@ -104,7 +121,11 @@ const nextRound = () => {
   if (isLastRound) {
     Object.assign(timer, {
       ...defaultTimer,
-      timeLeft: defaultTimer.minutes * 60,
+      timeLeft: timer.minutes * 60,
+      minutes: timer.minutes,
+      breakMinutes: timer.breakMinutes,
+      longBreakMinutes: timer.longBreakMinutes,
+      autoResume: timer.autoResume,
       status: timer.autoResume ? 'live' : 'paused'
     })
 
@@ -118,21 +139,21 @@ const nextRound = () => {
   timer.currentLoop++
 
   const isEven = timer.currentLoop % 2 === 0
+  const isLongBreak = timer.currentLoop === timer.loops
 
   if (isEven) {
-    timer.timeLeft = timer.breakMinutes * 60
+    timer.timeLeft = isLongBreak ? timer.longBreakMinutes * 60 : timer.breakMinutes * 60
   } else {
     timer.timeLeft = timer.minutes * 60
   }
 
   timer.status = timer.autoResume ? 'live' : 'paused'
+  timer.startedAt = undefined
+  timer.duration = undefined
 
   if (timer.status === 'live') {
     startTimer()
   }
-
-  timer.startedAt = undefined
-  timer.updatedAt = undefined
 }
 
 if (timer.status === 'live' && timer.timeLeft > 0) {
