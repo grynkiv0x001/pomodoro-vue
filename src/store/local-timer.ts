@@ -60,34 +60,7 @@ const startTimer = () => {
   timer.status = 'live'
 
   countdownInterval = setInterval(() => {
-    const timeLeft = computeTimeLeft()
-
-    timer.timeLeft = timeLeft
-
-    if (timeLeft <= 0) {
-      clearInterval(countdownInterval)
-
-      setTimeout(() => {
-        const isLast = timer.currentLoop === timer.loops
-
-        notify(
-          timer.currentLoop === timer.loops - 1
-            ? 'Focus session complete! Time for a long break 🎉'
-            : timer.currentLoop % 2 === 0
-              ? 'Break is over! Time to focus 🧠'
-              : 'Focus session complete! Take a short break ☕'
-        )
-
-        if (isLast) {
-          timer.currentLoop = 1
-          timer.status = 'paused'
-          timer.startedAt = undefined
-          timer.timeLeft = timer.minutes * 60
-        } else {
-          nextRound()
-        }
-      }, 1000)
-    }
+    timer.timeLeft = computeTimeLeft()
   }, 1000)
 }
 
@@ -166,6 +139,36 @@ watch(
     saveTimer({ ...timer })
   },
   { deep: true }
+)
+
+watch(
+  () => timer.timeLeft,
+  (timeLeft) => {
+    if (timer.status === 'live' && timeLeft === 0) {
+      clearInterval(countdownInterval)
+
+      setTimeout(() => {
+        const isLast = timer.currentLoop === timer.loops
+
+        notify(
+          timer.currentLoop === timer.loops - 1
+            ? 'Focus session complete! Time for a long break 🎉'
+            : timer.currentLoop % 2 === 0
+              ? 'Break is over! Time to focus 🧠'
+              : 'Focus session complete! Take a short break ☕'
+        )
+
+        if (isLast) {
+          timer.currentLoop = 1
+          timer.status = 'paused'
+          timer.startedAt = undefined
+          timer.timeLeft = timer.minutes * 60
+        } else {
+          nextRound()
+        }
+      }, 1000)
+    }
+  }
 )
 
 export function useLocalTimer() {

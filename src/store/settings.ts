@@ -1,6 +1,6 @@
 import { reactive, watch } from 'vue'
 import type { ISettings } from '@/core/models'
-import { loadSettings, removeTimer, saveSettings } from '@/helpers/storage'
+import { loadSettings, removeSettings, saveSettings } from '@/helpers/storage'
 
 const defaultSettings: ISettings = {
   notifications: true // Just for comfort. Permission is still asked by browser.
@@ -19,7 +19,7 @@ const resetSettings = () => {
     ...defaultSettings
   })
 
-  removeTimer()
+  removeSettings()
 }
 
 watch(
